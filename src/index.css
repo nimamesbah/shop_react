@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+@theme {
+  --spacing-container: 1200px;
+  --color-global-red: #D10024;
+}
