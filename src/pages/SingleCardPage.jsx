@@ -1,7 +1,8 @@
 import { useEffect } from "react"
 import { useImmer } from "use-immer"
-import { SingleCard } from "../assets/components/Cards"
+import { SingleCard, SingleCardSkeleton } from "../assets/components/Cards"
 import { useParams } from "react-router-dom"
+
 
 export default function SingleCardPage(){
     const {id} = useParams()
@@ -18,9 +19,9 @@ export default function SingleCardPage(){
 
     return(
         <>
-            <div className="max-w-container mx-auto">
+            <div className="max-w-container mx-auto mt-3 ">
                 {
-                    isLoading? <h1>loading.....</h1> : <SingleCard data={singleData} />
+                    isLoading? <SingleCardSkeleton /> : <SingleCard data={singleData} />
                 }
                 
             </div>

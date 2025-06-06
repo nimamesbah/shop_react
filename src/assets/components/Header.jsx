@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 
+
 export default function Header(){
     return(
         <>
@@ -46,7 +47,7 @@ export default function Header(){
                   </div>
                   <div id="Bheader" className='w-full h-max bg-[#15161D] border-b-4 border-global-red'>
                     <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-3 flex-wrap md:flex-row justify-between items-center py-3'>
-                      <img src="src/assets/images/logo.png" alt=""  />
+                      <img src="./src/assets/images/logo.png" alt=""  />
                       <div className="flex justify-center rounded-4xl overflow-hidden ">
                         <select className='text-black bg-white py-2.5 px-2' name="" id="">
                           <option value="">all categories</option>
