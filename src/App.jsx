@@ -11,6 +11,7 @@ import Layout from './Layout';
 import SingleCardPage from './pages/SingleCardPage';
 import { createContext, useContext, useEffect } from 'react';
 import useCart from './hooks/useCart';
+import CartPage from './pages/CartPage';
 
 export const CartContext = createContext()
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/product/:id'  element={<SingleCardPage />}/>
+          <Route path='/cart' element={<CartPage />} />
         </Routes>
        </Layout>
       </CartContext.Provider>
