@@ -24,12 +24,12 @@ export default function MainCard({items:{id,category,image,title,price}}){
 }
 export function SingleCard({data:{id,category,image,title,price,rating,description}}){
     const {setCart,cart}= useContext(CartContext)
-    const [inpVal,setInpVal]=useImmer(0)
+    const [inpVal,setInpVal]=useImmer(1)
     const inpRef = useRef(null)
     
     function addToCart(input){
         setCart(draft=>{
-            draft.push({id:input,amount:inpVal})
+            draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
             
         })
         setInpVal(0)
@@ -61,7 +61,7 @@ export function SingleCard({data:{id,category,image,title,price,rating,descripti
                             cart.some(item=>item.id===id) ?<button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove to cart</button>:<button onClick={()=>addToCart(id)} className="bg-global-red animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
                         }
                         {
-                            !cart.some(item=>item.id===id)?<input ref={inpRef} onChange={()=>setInpVal(inpRef.current.value)}  className="w-20 text-2xl bg-blue-400 py-2 px-2.5 rounded-2xl  " value={inpVal} type="number" name="" id="" min={0} step={1}/>:""
+                            !cart.some(item=>item.id===id)?<input ref={inpRef} onChange={()=>setInpVal(inpRef.current.value)}  className="w-20 text-2xl bg-blue-400 py-2 px-2.5 rounded-2xl  " value={inpVal} type="number" name="" id="" min={1} step={1}/>:""
                         }
                             
                     </div>
@@ -124,8 +124,8 @@ export function CartCards({items:{id,amount}}){
 
     return(
         <>
-            <div className="flex gap-2.5 flex-col w-full items-center">
-                <img className=" aspect-square object-contain h-96" src={image} alt="" />
+            <div className="flex gap-2.5 flex-col w-full items-center shadow-2xl overflow-hidden rounded-2xl px-2.5 py-2">
+                <img className=" aspect-square object-contain h-96 border-b" src={image} alt="" />
                 <h1 className="text-center">{title}</h1>
                 <span className="text-xl mr-2">price:<span className="text-global-red text-2xl">${price}</span></span>
                 <div className=""><span className="text-xl mr-2">quantity:</span>
@@ -133,7 +133,7 @@ export function CartCards({items:{id,amount}}){
                         <input className="text-center w-20 text-xl bg-blue-400  px-2.5 rounded-2xl  " onChange={inputSetter} type="number" min={0} value={inpVal} />    
                     }
                 </div>
-                <button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove to cart</button>
+                <button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove From cart</button>
 
 
 
