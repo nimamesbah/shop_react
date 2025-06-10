@@ -1,8 +1,11 @@
 import { Button } from "@mui/material";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../App";
 
 
 export default function Header(){
+  const {cart}=useContext(CartContext)
   const navigate=useNavigate()
     return(
         <>
@@ -49,7 +52,7 @@ export default function Header(){
                   </div>
                   <div id="Bheader" className='w-full h-max bg-[#15161D] border-b-4 border-global-red'>
                     <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-3 flex-wrap md:flex-row justify-between items-center py-3'>
-                      <img src="./src/assets/images/logo.png" alt=""  />
+                      <img className="cursor-pointer" onClick={()=>navigate("/")} src="./src/assets/images/logo.png" alt=""  />
                       <div className="flex justify-center rounded-4xl overflow-hidden ">
                         <select className='text-black bg-white py-2.5 px-2' name="" id="">
                           <option value="">all categories</option>
@@ -59,7 +62,8 @@ export default function Header(){
                         <input className='bg-white md:w-[350px] w-[60%] text-black border-l px-2' type="text" name="" id="" placeholder='search here' />
                         <Button className='!bg-global-red !rounded-[0px]' variant="contained">search</Button>
                       </div>
-                      <div onClick={()=> navigate("/cart")} className="flex  group cursor-pointer justify-between flex-col items-center">
+                      <div onClick={()=> navigate("/cart")} className="flex  group cursor-pointer justify-between flex-col items-center relative">
+                        <div className="rounded-full w-5 text-sm text-black text-center bg-global-red right-0 top-[-13px] absolute">{cart.length}</div>
                         <svg className=' ' width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path className='group-hover:stroke-global-red duration-300' d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>

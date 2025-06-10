@@ -9,15 +9,41 @@ import { CartContext } from "../../App"
 
 
 export default function MainCard({items:{id,category,image,title,price}}){
-    
+    const {cart,setCart}=useContext(CartContext)
+     const inpRef = useRef(null)
+     const [inpVal,setInpVal]=useImmer(1)
     const navigate= useNavigate()
+    function addToCart(input,event){
+        event.stopPropagation()
+        setCart(draft=>{
+            draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
+            
+        })
+        setInpVal(0)
+        
+
+    }
+    function removeFromCart(input,event){
+        event.stopPropagation()
+        setCart(draft=>{
+            draft.splice(draft.findIndex(item=>item.id===input),1)
+        })
+    }
     return(
         <>
-        <div onClick={()=> navigate(`/product/${id}`)} id={`item${id}`} className="flex flex-col gap-2 justify-between items-center w-52 hover:shadow-[0_0_0_2px_#D10024] py-2 px-4 shadow-[0_0_0_1px_#E4E7ED] h-[450px] text-center cursor-pointer duration-100  ">
+        <div onClick={()=> navigate(`/product/${id}`)} id={`item${id}`} className="flex flex-col gap-2 justify-between items-center w-52 hover:shadow-[0_0_0_2px_#D10024] py-2 px-4 shadow-[0_0_0_1px_#E4E7ED] h-[500px] text-center cursor-pointer duration-100  ">
             <img className="object-contain w-full h-[260px]" src={image} alt="" />
             <div className="">{category}</div>
             <div className="break-words">{title}</div>
             <div>{price}$</div>
+            <div className="flex justify-between items-center gap-2">
+            {
+                            cart.some(item=>item.id===id) ?<button onClick={(event)=>removeFromCart(id,event)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white text-sm rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove to cart</button>:<button onClick={(event)=>addToCart(id,event)} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
+                        }
+                        {
+                            !cart.some(item=>item.id===id)?<input ref={inpRef} onClick={(event)=>event.stopPropagation()} onChange={()=>setInpVal(inpRef.current.value)}  className="w-14 text-xl bg-blue-400 text-center  rounded-2xl  " value={inpVal||1} type="number" name="" id="" min={1} />:""
+            }
+            </div>
         </div>
         </>
     )
@@ -111,8 +137,9 @@ export function CartCards({items:{id,amount}}){
     function inputSetter(event){
         setInpVal(event.target.value)
         setCart(draft=>{
-            draft.find(item=>item.id===id).amount=inpVal
-
+            const item=  draft.find(item=>item.id===id)
+            item.amount=inpVal
+            item.price=price*inpVal
         })
     
     }

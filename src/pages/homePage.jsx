@@ -5,6 +5,7 @@ import AllFetch from '../assets/components/all-products-fetch';
 import { useNavigate } from 'react-router-dom';
 import Header from '../assets/components/Header';
 import { useCallback } from 'react';
+// question section: cartPage
 
 
 
