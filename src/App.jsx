@@ -12,6 +12,7 @@ import SingleCardPage from './pages/SingleCardPage';
 import { createContext, useContext, useEffect } from 'react';
 import useCart from './hooks/useCart';
 import CartPage from './pages/CartPage';
+import CategoryPage from './pages/categoryPage';
 
 export const CartContext = createContext()
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/product/:id'  element={<SingleCardPage />}/>
           <Route path='/cart' element={<CartPage />} />
+          <Route path='/products/category/:category' element={<CategoryPage />} />
         </Routes>
        </Layout>
       </CartContext.Provider>

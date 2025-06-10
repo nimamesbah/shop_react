@@ -1,12 +1,21 @@
 import { Button } from "@mui/material";
-import { useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../App";
+import { useImmer } from "use-immer";
 
 
 export default function Header(){
   const {cart}=useContext(CartContext)
+  const [categories,setCategories]= useImmer([])
   const navigate=useNavigate()
+  const categoriesFetch = useCallback(()=>{
+        fetch('https://fakestoreapi.com/products/categories')
+        .then(response => response.json())
+        .then(data => setCategories(data) )
+      },[])
+      useEffect(()=> categoriesFetch(),[])
+    
     return(
         <>
             <header className='text-white'>
@@ -51,7 +60,7 @@ export default function Header(){
                       </div>
                   </div>
                   <div id="Bheader" className='w-full h-max bg-[#15161D] border-b-4 border-global-red'>
-                    <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-3 flex-wrap md:flex-row justify-between items-center py-3'>
+                    <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-4 flex-wrap md:flex-row justify-between items-center py-3'>
                       <img className="cursor-pointer" onClick={()=>navigate("/")} src="./src/assets/images/logo.png" alt=""  />
                       <div className="flex justify-center rounded-4xl overflow-hidden ">
                         <select className='text-black bg-white py-2.5 px-2' name="" id="">
@@ -73,6 +82,11 @@ export default function Header(){
                     </div>
                   </div>
                 </header>
+                <div className="bg-[#F9F6EE] border-b border-global-red ">
+                      <div className="w-[90%] max-w-container mx-auto flex gap-2 flex-wrap py-2 sm:justify-start justify-center sm:text-xl text-sm ">
+                      {categories.map(item=><h1 onClick={()=>navigate(`products/category/${item}`)} className='px-2 border-l hover:text-global-red cursor-pointer'>{item}</h1>)}
+                      </div>
+                    </div>
         </>
     )
 }
