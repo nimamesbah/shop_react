@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { useImmer } from "use-immer"
 import { CartContext } from "../../App"
+import useGetSingleProducts from "../../hooks/useGetSingleProduct"
 
 
 export default function MainCard({items:{id,category,image,title,price}}){
@@ -125,22 +126,27 @@ export function SingleCardSkeleton(){
         </>
     )
 }
+// why data:{price,title,image} in getSingle hook not working??
 export function CartCards({items:{id,amount}}){
     const {setCart}= useContext(CartContext)
-    const [{price,title,image},setData]=useImmer({})
-    const [inpVal,setInpVal]=useImmer(amount)
+    const {data,isLoading} = useGetSingleProducts(id)
+    // const [{price,title,image},setData]=useImmer({})
+    // const [inpVal,setInpVal]=useImmer(amount)
+    const inp = useRef()
+    // useEffect(()=>{setData(data)},[])
 
-    useEffect(()=>{fetch(`https://fakestoreapi.com/products/${id}`)
-  .then(response => response.json())
-  .then(data => setData(data))},[])
+//     useEffect(()=>{fetch(`https://fakestoreapi.com/products/${id}`)
+//   .then(response => response.json())
+//   .then(data => setData(data))},[])
 
     function inputSetter(event){
-        setInpVal(event.target.value)
+        // setInpVal(event.target.value)
         setCart(draft=>{
             const item=  draft.find(item=>item.id===id)
-            item.amount=inpVal
-            item.price=price*inpVal
+            item.amount=inp.current.value
+            item.price=data.price*inp.current.value
         })
+        
     
     }
     function removeFromCart(input){
@@ -150,14 +156,17 @@ export function CartCards({items:{id,amount}}){
     }
 
     return(
-        <>
+        <>{
+            isLoading?
+             <div className="">loading...</div>
+            :
             <div className="flex gap-2.5 flex-col w-full items-center shadow-2xl overflow-hidden rounded-2xl px-2.5 py-2">
-                <img className=" aspect-square object-contain h-96 border-b" src={image} alt="" />
-                <h1 className="text-center">{title}</h1>
-                <span className="text-xl mr-2">price:<span className="text-global-red text-2xl">${price}</span></span>
+                <img className=" aspect-square object-contain h-96 border-b" src={data.image} alt="" />
+                <h1 className="text-center">{data.title}</h1>
+                <span className="text-xl mr-2">price:<span className="text-global-red text-2xl">${data.price}</span></span>
                 <div className=""><span className="text-xl mr-2">quantity:</span>
                     {
-                        <input className="text-center w-20 text-xl bg-blue-400  px-2.5 rounded-2xl  " onChange={inputSetter} type="number" min={0} value={inpVal} />    
+                        <input className="text-center w-20 text-xl bg-blue-400  px-2.5 rounded-2xl  " onChange={inputSetter} ref={inp} type="number" min={1} value={amount} />    
                     }
                 </div>
                 <button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove From cart</button>
@@ -165,6 +174,7 @@ export function CartCards({items:{id,amount}}){
 
 
             </div>
+            }
         </>
     )
 }

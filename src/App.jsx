@@ -13,8 +13,11 @@ import { createContext, useContext, useEffect } from 'react';
 import useCart from './hooks/useCart';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/categoryPage';
+import NotFoundPage from './pages/notFoundPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export const CartContext = createContext()
+const queryClient = new QueryClient()
 function App() {
     const [cart,setCart] = useCart()
     
@@ -23,6 +26,7 @@ function App() {
   return (
     <>
     <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
       <CartContext.Provider value={{cart,setCart}}>
        <Layout>
         <Routes>
@@ -30,9 +34,11 @@ function App() {
           <Route path='/product/:id'  element={<SingleCardPage />}/>
           <Route path='/cart' element={<CartPage />} />
           <Route path='/products/category/:category' element={<CategoryPage />} />
+          <Route path='/404' element={<NotFoundPage />} />
         </Routes>
        </Layout>
       </CartContext.Provider>
+    </QueryClientProvider>
     </BrowserRouter>
     </>
   )

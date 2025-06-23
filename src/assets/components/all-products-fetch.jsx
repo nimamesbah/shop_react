@@ -1,8 +1,17 @@
 import { useEffect } from "react";
 import MainCard from "./Cards";
+import { allProductsFetch } from "../../API/api-config";
 
-export default function AllFetch({fetchFunc,products}){
-    useEffect(()=> fetchFunc(),[])
+export default function AllFetch({fetchFunc,products,setProducts}){
+    useEffect(()=> {
+        async function get(){
+            const get = await allProductsFetch.get("products")
+            setProducts(get)
+
+        }
+        get()
+
+    } ,[])
 
 
 
