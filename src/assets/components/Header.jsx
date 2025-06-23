@@ -1,20 +1,37 @@
 import { Button } from "@mui/material";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../App";
 import { useImmer } from "use-immer";
+import axios from "axios";
+import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
+import { FilterCard } from "./Cards";
+import { input } from "@material-tailwind/react";
 
 
 export default function Header(){
   const {cart}=useContext(CartContext)
   const [categories,setCategories]= useImmer([])
+  const [all,setAll]=useImmer([])
+  const [filtered,setFiltered]=useImmer([])
   const navigate=useNavigate()
+  const inp=useRef()
+  const filterMenu = useRef()
   const categoriesFetch = useCallback(()=>{
-        fetch('https://fakestoreapi.com/products/categories')
-        .then(response => response.json())
-        .then(data => setCategories(data) )
+        axios.get('https://fakestoreapi.com/products/categories')
+        .then(res=>setCategories(res.data))
       },[])
-      useEffect(()=> categoriesFetch(),[])
+  useEffect(()=> categoriesFetch(),[])
+  useEffect(()=>{
+    axios.get('https://fakestoreapi.com/products')
+    .then(res=>setAll(res.data))
+  },[])
+  useEffect(()=>console.log(filtered.length))
+  
+  
+
+  
+  
     
     return(
         <>
@@ -62,14 +79,23 @@ export default function Header(){
                   <div id="Bheader" className='w-full h-max bg-[#15161D] border-b-4 border-global-red'>
                     <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-4 flex-wrap md:flex-row justify-between items-center py-3'>
                       <img className="cursor-pointer" onClick={()=>navigate("/")} src="./src/assets/images/logo.png" alt=""  />
-                      <div className="flex justify-center rounded-4xl overflow-hidden ">
+                      <div className="flex justify-center rounded-4xl overflow-x-hidden-hidden relative ">
                         <select className='text-black bg-white py-2.5 px-2' name="" id="">
                           <option value="">all categories</option>
                           <option value="">test 1</option>
                           <option value="">test 2</option>
                         </select>
-                        <input className='bg-white md:w-[350px] w-[60%] text-black border-l px-2' type="text" name="" id="" placeholder='search here' />
+                        <input className='bg-white md:w-[350px] w-[60%] text-black border-l px-2' type="text" name="" id="" placeholder='search here' onClick={()=>setFiltered(all.filter(item=>item.title.toLowerCase().includes(inp.current.value.toLowerCase())))} onChange={()=>setFiltered(all.filter(item=>item.title.toLowerCase().includes(inp.current.value.toLowerCase())))} ref={inp} />
                         <Button className='!bg-global-red !rounded-[0px]' variant="contained">search</Button>
+                        <div ref={filterMenu} className={`md:w-[77%] w-full z-50 flex pt-2 text-black flex-col gap-2 items-center  absolute h-max left-0 md:left-[131px] top-[44px]  bg-white ${filtered.length===0||inp.current.value===""?"hidden":"block"} `}>
+                          <svg onClick={()=>{setFiltered([]);inp.current.value=""}} className="cursor-pointer" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10.0303 8.96965C9.73741 8.67676 9.26253 8.67676 8.96964 8.96965C8.67675 9.26255 8.67675 9.73742 8.96964 10.0303L10.9393 12L8.96966 13.9697C8.67677 14.2625 8.67677 14.7374 8.96966 15.0303C9.26255 15.3232 9.73743 15.3232 10.0303 15.0303L12 13.0607L13.9696 15.0303C14.2625 15.3232 14.7374 15.3232 15.0303 15.0303C15.3232 14.7374 15.3232 14.2625 15.0303 13.9696L13.0606 12L15.0303 10.0303C15.3232 9.73744 15.3232 9.26257 15.0303 8.96968C14.7374 8.67678 14.2625 8.67678 13.9696 8.96968L12 10.9393L10.0303 8.96965Z" fill="#1C274C"/>
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C6.06294 1.25 1.25 6.06294 1.25 12C1.25 17.9371 6.06294 22.75 12 22.75C17.9371 22.75 22.75 17.9371 22.75 12C22.75 6.06294 17.9371 1.25 12 1.25ZM2.75 12C2.75 6.89137 6.89137 2.75 12 2.75C17.1086 2.75 21.25 6.89137 21.25 12C21.25 17.1086 17.1086 21.25 12 21.25C6.89137 21.25 2.75 17.1086 2.75 12Z" fill="#1C274C"/>
+                          </svg>  
+                          {filtered.map(item=> <FilterCard items={item} setFiltered={setFiltered} input={inp}/>).slice(0,6)}
+
+                          
+                        </div>  
                       </div>
                       <div onClick={()=> navigate("/cart")} className="flex  group cursor-pointer justify-between flex-col items-center relative">
                         <div className="rounded-full w-5 text-sm text-black text-center bg-global-red right-0 top-[-13px] absolute">{cart.length}</div>

@@ -139,7 +139,7 @@ export function CartCards({items:{id,amount}}){
 //   .then(response => response.json())
 //   .then(data => setData(data))},[])
 
-    function inputSetter(event){
+    function inputSetter(){
         // setInpVal(event.target.value)
         setCart(draft=>{
             const item=  draft.find(item=>item.id===id)
@@ -175,6 +175,20 @@ export function CartCards({items:{id,amount}}){
 
             </div>
             }
+        </>
+    )
+}
+export function FilterCard({items:{image,price,title,id},setFiltered,input}){
+    const navigate = useNavigate()
+    
+    
+    return(
+        <>
+            <div onClick={()=>{navigate(`/product/${id}`);setFiltered([]);input.current.value=""}} className="flex py-1 px-2 cursor-pointer   border-b border-black gap-2.5 h-14 items-center w-full">
+                            <img className="h-full aspect-square " src={image} alt="" />
+                            <h1 className="text-center text-sm w-[200px] overflow-hidden">{title}</h1>
+                            <p className="text-end grow-[10] text-red-400">${price}</p>
+            </div >
         </>
     )
 }
