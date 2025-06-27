@@ -15,6 +15,7 @@ import CartPage from './pages/CartPage';
 import CategoryPage from './pages/categoryPage';
 import NotFoundPage from './pages/notFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import SearchedPage from './pages/SearchedPage';
 
 export const CartContext = createContext()
 const queryClient = new QueryClient()
@@ -35,6 +36,7 @@ function App() {
           <Route path='/cart' element={<CartPage />} />
           <Route path='/products/category/:category' element={<CategoryPage />} />
           <Route path='/404' element={<NotFoundPage />} />
+          <Route path='/searched/:items' element={<SearchedPage />} />
         </Routes>
        </Layout>
       </CartContext.Provider>

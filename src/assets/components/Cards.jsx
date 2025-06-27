@@ -184,7 +184,7 @@ export function FilterCard({items:{image,price,title,id},setFiltered,input}){
     
     return(
         <>
-            <div onClick={()=>{navigate(`/product/${id}`);setFiltered([]);input.current.value=""}} className="flex py-1 px-2 cursor-pointer   border-b border-black gap-2.5 h-14 items-center w-full">
+            <div onClick={()=>{navigate(`/product/${id}`);setFiltered([]);input.current.value=""}} className="flex py-1 px-2 cursor-pointer hover:text-global-red hover:scale-[1.1] bg-white hover:rounded-2xl border-b border-black gap-2.5 h-14 items-center w-full">
                             <img className="h-full aspect-square " src={image} alt="" />
                             <h1 className="text-center text-sm w-[200px] overflow-hidden">{title}</h1>
                             <p className="text-end grow-[10] text-red-400">${price}</p>
