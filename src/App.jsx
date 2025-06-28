@@ -35,7 +35,7 @@ function App() {
           <Route path='/product/:id'  element={<SingleCardPage />}/>
           <Route path='/cart' element={<CartPage />} />
           <Route path='/products/category/:category' element={<CategoryPage />} />
-          <Route path='/404' element={<NotFoundPage />} />
+          <Route path='/*' element={<NotFoundPage />} />
           <Route path='/searched/:items' element={<SearchedPage />} />
         </Routes>
        </Layout>
