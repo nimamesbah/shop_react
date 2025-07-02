@@ -1,7 +1,7 @@
 
 import { useImmer } from 'use-immer'
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
+import { Button, CssBaseline, ThemeProvider } from '@mui/material';
 import AllFetch from './assets/components/all-products-fetch';
 
 import './App.css'
@@ -17,15 +17,20 @@ import NotFoundPage from './pages/notFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchedPage from './pages/SearchedPage';
 
+import theme from './assets/themes/theme';
+
 export const CartContext = createContext()
 const queryClient = new QueryClient()
 function App() {
     const [cart,setCart] = useCart()
     
     
+    
   
   return (
     <>
+    <ThemeProvider theme={theme}>
+     <CssBaseline />
     <BrowserRouter>
     <QueryClientProvider client={queryClient}>
       <CartContext.Provider value={{cart,setCart}}>
@@ -42,6 +47,7 @@ function App() {
       </CartContext.Provider>
     </QueryClientProvider>
     </BrowserRouter>
+    </ThemeProvider>
     </>
   )
 }
