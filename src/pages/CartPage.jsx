@@ -4,6 +4,8 @@ import { CartCards } from "../assets/components/Cards"
 import { useImmer } from "use-immer"
 import { useNavigate } from "react-router-dom"
 
+
+// why prices doesnt rerendered when cart updated
 export default function CartPage(){
     const {cart,setCart} = useContext(CartContext)
     const [prices,setPrices] = useImmer(cart.map((item=>item=item.price)))
@@ -28,7 +30,6 @@ export default function CartPage(){
                 <span className="">Fee: <span className="text-xl text-global-red">${Math.floor(prices.reduce((total,current)=>total+Number(current),0))}</span></span>
                 <button onClick={()=>navigate("/")} className="cursor-pointer border-b rounded-2xl border-global-red px-2 py-1 text-center">shop</button>
                 {cart.length===0? "" : <button className="w-max  cursor-pointer rounded-2xl border-b border-global-red py-1 px-2">Buy Now</button>}
-                {/* why !(not) doesnt work in cart.length */}
             </div>
            </div> 
         </>

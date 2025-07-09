@@ -9,7 +9,7 @@ import HomePage from './pages/homePage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './Layout';
 import SingleCardPage from './pages/SingleCardPage';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 import useCart from './hooks/useCart';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/categoryPage';
@@ -18,11 +18,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchedPage from './pages/SearchedPage';
 
 import theme from './assets/themes/theme';
+import cartReducer from './assets/reducers/cartReducer';
 
 export const CartContext = createContext()
 const queryClient = new QueryClient()
 function App() {
-    const [cart,setCart] = useCart()
+    const [cart,dispatch] = useReducer(cartReducer,JSON.parse(localStorage.getItem("cart"))||[])
     
     
     
@@ -33,7 +34,7 @@ function App() {
      <CssBaseline />
     <BrowserRouter>
     <QueryClientProvider client={queryClient}>
-      <CartContext.Provider value={{cart,setCart}}>
+      <CartContext.Provider value={{cart,dispatch}}>
        <Layout>
         <Routes>
           <Route path='/' element={<HomePage />} />

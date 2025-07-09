@@ -1,33 +1,40 @@
 
 
-import { filledInputClasses, Rating } from "@mui/material"
+import { Button, filledInputClasses, Rating, TextField } from "@mui/material"
 
 import { useContext, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { useImmer } from "use-immer"
 import { CartContext } from "../../App"
 import useGetSingleProducts from "../../hooks/useGetSingleProduct"
+import { actionTypes } from "../reducers/cartReducer"
+import InputMui from "../themes/inputMui"
 
-
+// why cart.find(item=>item.id===id).amount directly in input value doesnt work
 export default function MainCard({items:{id,category,image,title,price}}){
-    const {cart,setCart}=useContext(CartContext)
-     const inpRef = useRef(null)
+     const {cart,dispatch}=useContext(CartContext)
      const [inpVal,setInpVal]=useImmer(1)
     const navigate= useNavigate()
-    function addToCart(input,event){
+    const inpRef=useRef(null)
+    function addToCart(event){
         event.stopPropagation()
-        setCart(draft=>{
-            draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
-            
-        })
-        setInpVal(0)
         
-
+        dispatch(
+            // draft=>{
+            // draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
+            {
+              type:actionTypes.add,
+              payload: {id,price:Number(price),ref:inpRef}
+            
+    })
+            
     }
-    function removeFromCart(input,event){
+    
+    function removeFromCart(event){
         event.stopPropagation()
-        setCart(draft=>{
-            draft.splice(draft.findIndex(item=>item.id===input),1)
+        dispatch({
+            type:actionTypes.remove,
+            payload:{id,price:Number(price),ref:inpRef}
         })
     }
     return(
@@ -39,36 +46,37 @@ export default function MainCard({items:{id,category,image,title,price}}){
             <div>{price}$</div>
             <div className="flex justify-between items-center gap-2">
             {
-                            cart.some(item=>item.id===id) ?<button onClick={(event)=>removeFromCart(id,event)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white text-sm rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove to cart</button>:<button onClick={(event)=>addToCart(id,event)} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
+                            cart.some(item=>item.id===id) ?<div className="flex justify-between w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={addToCart}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(event)}>-</button></div>:<button onClick={addToCart} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
                         }
-                        {
-                            !cart.some(item=>item.id===id)?<input ref={inpRef} onClick={(event)=>event.stopPropagation()} onChange={()=>setInpVal(inpRef.current.value)}  className="w-14 text-xl bg-blue-400 text-center  rounded-2xl  " value={inpVal||1} type="number" name="" id="" min={1} />:""
-            }
+                        
             </div>
         </div>
         </>
     )
 }
 export function SingleCard({data:{id,category,image,title,price,rating,description}}){
-    const {setCart,cart}= useContext(CartContext)
-    const [inpVal,setInpVal]=useImmer(1)
+    const {dispatch,cart}= useContext(CartContext)
     const inpRef = useRef(null)
     
-    function addToCart(input){
-        setCart(draft=>{
-            draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
-            
-        })
-        setInpVal(0)
+    function addToCart(){
         
-
-    }
-    function removeFromCart(input){
-        setCart(draft=>{
-            draft.splice(draft.findIndex(item=>item.id===input),1)
-        })
+        
+        dispatch(
+           
+            {
+              type:actionTypes.add,
+              payload: {id,price:Number(price),ref:inpRef}
+            
+    })
+            
     }
     
+    function removeFromCart(){
+        dispatch({
+            type:actionTypes.remove,
+            payload:{id,price:Number(price),ref:inpRef}
+        })
+    }
     
 
     return(
@@ -85,11 +93,8 @@ export function SingleCard({data:{id,category,image,title,price,rating,descripti
                     <span className="text-3xl sm:text-center sm:w-32 ">${price}</span>
                     <div className="flex flex-col sm:flex-row gap-2 w-full items-center">
                         {
-                            cart.some(item=>item.id===id) ?<button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove to cart</button>:<button onClick={()=>addToCart(id)} className="bg-global-red animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
-                        }
-                        {
-                            !cart.some(item=>item.id===id)?<input ref={inpRef} onChange={()=>setInpVal(inpRef.current.value)}  className="w-20 text-2xl bg-blue-400 py-2 px-2.5 rounded-2xl  " value={inpVal} type="number" name="" id="" min={1} step={1}/>:""
-                        }
+                            cart.some(item=>item.id===id) ?<div className="flex  w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={addToCart}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(event)}>-</button></div>:<button onClick={addToCart} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>                        }
+                        
                             
                     </div>
                     
@@ -126,32 +131,34 @@ export function SingleCardSkeleton(){
         </>
     )
 }
-// why data:{price,title,image} in getSingle hook not working??
 export function CartCards({items:{id,amount}}){
-    const {setCart}= useContext(CartContext)
+    const {dispatch,cart}= useContext(CartContext)
     const {data,isLoading} = useGetSingleProducts(id)
     // const [{price,title,image},setData]=useImmer({})
     // const [inpVal,setInpVal]=useImmer(amount)
-    const inp = useRef()
+    const inpRef = useRef()
     // useEffect(()=>{setData(data)},[])
 
 //     useEffect(()=>{fetch(`https://fakestoreapi.com/products/${id}`)
 //   .then(response => response.json())
 //   .then(data => setData(data))},[])
-
-    function inputSetter(){
-        // setInpVal(event.target.value)
-        setCart(draft=>{
-            const item=  draft.find(item=>item.id===id)
-            item.amount=inp.current.value
-            item.price=data.price*inp.current.value
-        })
+    function addToCart(){
         
+        
+        dispatch(
+           
+            {
+              type:actionTypes.add,
+              payload: {id,price:Number(data.price),ref:inpRef}
+            
+    })
+}
+     
     
-    }
-    function removeFromCart(input){
-        setCart(draft=>{
-            draft.splice(draft.findIndex(item=>item.id===input),1)
+    function removeFromCart(){
+        dispatch({
+            type:actionTypes.remove,
+            payload:{id,price:Number(data.price),ref:inpRef}
         })
     }
 
@@ -166,10 +173,9 @@ export function CartCards({items:{id,amount}}){
                 <span className="text-xl mr-2">price:<span className="text-global-red text-2xl">${data.price}</span></span>
                 <div className=""><span className="text-xl mr-2">quantity:</span>
                     {
-                        <input className="text-center w-20 text-xl bg-blue-400  px-2.5 rounded-2xl  " onChange={inputSetter} ref={inp} type="number" min={1} value={amount} />    
+                            cart.some(item=>item.id===id) ?<div className="flex  w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={addToCart}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(event)}>-</button></div>:<button onClick={addToCart} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>                                            
                     }
                 </div>
-                <button onClick={()=>removeFromCart(id)} className="bg-black animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-global-red duration-200">remove From cart</button>
 
 
 

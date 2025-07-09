@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../assets/components/Header';
 import { useCallback, useEffect } from 'react';
 import axios from 'axios';
-// question section: .,why logo gone,cartCards data as {},searchedPage syntax,themes secondary color doesnt work
+// question section: mainCard in cards, cartReducer.js,cartPage price update
 
 
 

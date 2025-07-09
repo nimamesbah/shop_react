@@ -91,7 +91,7 @@ export default function Header(){
                   </div>
                   <div id="Bheader" className='w-full h-max bg-[#15161D] border-b-4 border-global-red'>
                     <div id="bHeader-container" className='w-[90%] max-w-container mx-auto flex flex-col gap-4 flex-wrap md:flex-row justify-between items-center py-3'>
-                      <img className="cursor-pointer" onClick={()=>navigate("/")} src="./src/assets/images/logo.png" alt=""  />
+                      <img className="cursor-pointer" onClick={()=>navigate("/")} src="/logo.png" alt=""  />
                       <div className="flex justify-center rounded-4xl overflow-x-hidden-hidden relative ">
                         <select className='text-black bg-white py-2.5 px-2' name="" id="">
                           <option value="">all categories</option>

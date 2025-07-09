@@ -18,5 +18,18 @@ const theme = createTheme({
         // secondary doesnt work
 
     },
-})
+    components: {
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    borderRadius: 12,
+                    textTransform: 'none',
+                    width: "10px",
+                    fontWeight: 'bold',
+                    boxShadow: 'none',
+                }
+            }
+        }
+    }
+});
 export default theme
