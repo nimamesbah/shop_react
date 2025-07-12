@@ -9,10 +9,11 @@ import { FilterCard } from "./Cards";
 import { input } from "@material-tailwind/react";
 import useGetAllProducts from "../../hooks/useGetAllProducts";
 import { allProductsFetch } from "../../API/api-config";
+import { useCartStore } from "../../hooks/usecartStore";
 
 
 export default function Header(){
-  const {cart}=useContext(CartContext)
+  const {cart}=useCartStore()
   const [categories,setCategories]= useImmer([])
   const {data,isLoading}= useGetAllProducts()
   const [filtered,setFiltered]=useImmer([])

@@ -3,11 +3,12 @@ import { CartContext } from "../App"
 import { CartCards } from "../assets/components/Cards"
 import { useImmer } from "use-immer"
 import { useNavigate } from "react-router-dom"
+import { useCartStore } from "../hooks/usecartStore"
 
 
 // why prices doesnt rerendered when cart updated
 export default function CartPage(){
-    const {cart,setCart} = useContext(CartContext)
+    const {cart} = useCartStore()
     const [prices,setPrices] = useImmer(cart.map((item=>item=item.price)))
     const navigate= useNavigate()
     useEffect(()=>{

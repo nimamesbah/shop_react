@@ -9,34 +9,23 @@ import { CartContext } from "../../App"
 import useGetSingleProducts from "../../hooks/useGetSingleProduct"
 import { actionTypes } from "../reducers/cartReducer"
 import InputMui from "../themes/inputMui"
+import { useCartStore } from "../../hooks/usecartStore"
 
 // why cart.find(item=>item.id===id).amount directly in input value doesnt work
 export default function MainCard({items:{id,category,image,title,price}}){
-     const {cart,dispatch}=useContext(CartContext)
+     const {cart,addToCart,removeFromCart}= useCartStore()
      const [inpVal,setInpVal]=useImmer(1)
     const navigate= useNavigate()
     const inpRef=useRef(null)
-    function addToCart(event){
-        event.stopPropagation()
-        
-        dispatch(
-            // draft=>{
-            // draft.push({id:input,amount:inpVal,price:Number(price)*inpVal})
-            {
-              type:actionTypes.add,
-              payload: {id,price:Number(price),ref:inpRef}
-            
-    })
-            
-    }
     
-    function removeFromCart(event){
-        event.stopPropagation()
-        dispatch({
-            type:actionTypes.remove,
-            payload:{id,price:Number(price),ref:inpRef}
-        })
-    }
+    
+    // function removeFromCart(event){
+    //     event.stopPropagation()
+    //     dispatch({
+    //         type:actionTypes.remove,
+    //         payload:{id,price:Number(price),ref:inpRef}
+    //     })
+    // }
     return(
         <>
         <div onClick={()=> navigate(`/product/${id}`)} id={`item${id}`} className="flex flex-col gap-2 justify-between items-center w-52 hover:shadow-[0_0_0_2px_#D10024] py-2 px-4 shadow-[0_0_0_1px_#E4E7ED] h-[500px] text-center cursor-pointer duration-100  ">
@@ -46,7 +35,7 @@ export default function MainCard({items:{id,category,image,title,price}}){
             <div>{price}$</div>
             <div className="flex justify-between items-center gap-2">
             {
-                            cart.some(item=>item.id===id) ?<div className="flex justify-between w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={addToCart}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(event)}>-</button></div>:<button onClick={addToCart} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
+                            cart.some(item=>item.id===id) ?<div className="flex justify-between w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>addToCart(id,price,event)}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(id,event,price)}>-</button></div>:<button onClick={(event)=>addToCart(id,price,event)} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>
                         }
                         
             </div>
@@ -131,9 +120,9 @@ export function SingleCardSkeleton(){
         </>
     )
 }
-export function CartCards({items:{id,amount}}){
-    const {dispatch,cart}= useContext(CartContext)
+export function CartCards({items:{id,amount,price}}){
     const {data,isLoading} = useGetSingleProducts(id)
+    const {cart,addToCart,removeFromCart}=useCartStore()
     // const [{price,title,image},setData]=useImmer({})
     // const [inpVal,setInpVal]=useImmer(amount)
     const inpRef = useRef()
@@ -142,25 +131,10 @@ export function CartCards({items:{id,amount}}){
 //     useEffect(()=>{fetch(`https://fakestoreapi.com/products/${id}`)
 //   .then(response => response.json())
 //   .then(data => setData(data))},[])
-    function addToCart(){
-        
-        
-        dispatch(
-           
-            {
-              type:actionTypes.add,
-              payload: {id,price:Number(data.price),ref:inpRef}
-            
-    })
-}
+    
      
     
-    function removeFromCart(){
-        dispatch({
-            type:actionTypes.remove,
-            payload:{id,price:Number(data.price),ref:inpRef}
-        })
-    }
+   
 
     return(
         <>{
@@ -173,7 +147,7 @@ export function CartCards({items:{id,amount}}){
                 <span className="text-xl mr-2">price:<span className="text-global-red text-2xl">${data.price}</span></span>
                 <div className=""><span className="text-xl mr-2">quantity:</span>
                     {
-                            cart.some(item=>item.id===id) ?<div className="flex  w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={addToCart}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(event)}>-</button></div>:<button onClick={addToCart} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>                                            
+                            cart.some(item=>item.id===id) ?<div className="flex  w-full gap-4"><button className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>addToCart(id, data.price, event)}>+</button><input ref={inpRef} onClick={(event)=>{event.stopPropagation()}} value={cart.find(item=>item.id===id).amount||1} className="border border-global-red w-16 rounded-2xl px-2 py-1" type="number" /><button  className=" cursor-pointer hover:bg-black bg-global-red text-white px-2 rounded-full" onClick={(event)=>removeFromCart(id,event,data.price)}>-</button></div>:<button onClick={(event)=>addToCart(id, data.price, event)} className="bg-global-red text-sm animate-pulse [animation-iteration-count:1] px-2 py-1.5 w-full capitalize text-white rounded-3xl cursor-pointer hover:bg-black duration-200">add to cart</button>                                            
                     }
                 </div>
 
