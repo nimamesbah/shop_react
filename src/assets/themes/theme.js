@@ -10,10 +10,10 @@ const theme = createTheme({
 
     palette: {
         primary: {
-            main: deepOrange[500],
+            main: '#D10024',
         },
         secondary: {
-            main: '#D10024',
+            main: "#000",
         },
         // secondary doesnt work
 
