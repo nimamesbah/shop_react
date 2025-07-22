@@ -7,6 +7,8 @@ import SearchedPage from "./pages/SearchedPage";
 import SingleCardPage from "./pages/SingleCardPage";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./Layout";
+import DashboardPage from "./pages/dashboardPage";
+import ProtectedDashboard from "./protectedRoutes/ProtectedDashBoard";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/dashboard/:user",
+        element: (
+          <ProtectedDashboard>
+            <DashboardPage />
+          </ProtectedDashboard>
+        ),
       },
     ],
   },

@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, TextField } from "@mui/material";
 import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import useLogin from "../hooks/useLogin";
 import { useTokenStore } from "../hooks/useTokenStore";
@@ -22,12 +22,14 @@ export default function LoginPage() {
   const [invalidValues, setInvalidValues] = useImmer("");
   const navigate = useNavigate();
   const { token, setToken } = useTokenStore();
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema), mode: "onSubmit" });
   const { mutateAsync } = useLogin();
+
   async function submit(data) {
     try {
       const result = await mutateAsync({
@@ -36,6 +38,7 @@ export default function LoginPage() {
       });
       Cookies.set("token", result.token);
       setToken(result.token);
+      navigate(`/dashboard/${data.username}`);
     } catch (error) {
       setInvalidValues(error.response.data);
       setTimeout(() => {
@@ -58,13 +61,14 @@ export default function LoginPage() {
           onSubmit={handleSubmit(submit)}
           className="flex flex-col  gap-6 justify-center items-center w-max "
         >
-          username
           <TextField
             {...register("username")}
             placeholder="username"
             type="text"
             helperText={
-              !!errors?.username?.message
+              isSubmitting
+                ? "please wait..."
+                : !!errors?.username?.message
                 ? `${errors?.username?.message}`
                 : "" || `${invalidValues}`
             }

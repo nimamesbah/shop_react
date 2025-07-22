@@ -1,12 +1,11 @@
-import { Children } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./assets/components/footer";
 import Header from "./assets/components/Header";
-import { Outlet, useLocation } from "react-router-dom";
-const pathNames = ["/login"];
-export default function Layout({ children }) {
+const pathNames = ["login", "dashboard"];
+export default function Layout() {
   const location = useLocation();
-  console.log("loction", location.pathname);
-  const isHide = pathNames.includes(location.pathname);
+  console.log("loction", location.pathname.split("/").at(1));
+  const isHide = pathNames.includes(location.pathname.split("/").at(1));
 
   return isHide ? (
     <>
