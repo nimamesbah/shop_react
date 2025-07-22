@@ -6,9 +6,11 @@ import { allProductsFetch } from "../../API/api-config";
 import { useCartStore } from "../../hooks/usecartStore";
 import useGetAllProducts from "../../hooks/useGetAllProducts";
 import { FilterCard } from "./Cards";
+import { useTokenStore } from "../../hooks/useTokenStore";
 
 export default function Header() {
   const { cart } = useCartStore();
+  const { user, token } = useTokenStore();
   const [categories, setCategories] = useImmer([]);
   const { data, isLoading } = useGetAllProducts();
   const [filtered, setFiltered] = useImmer([]);
@@ -132,10 +134,12 @@ export default function Header() {
                 </svg>
 
                 <span
-                  onClick={() => navigate("/login")}
-                  className="text-white cursor-pointer"
+                  onClick={() =>
+                    token ? navigate(`/dashboard/${user}`) : navigate("/login")
+                  }
+                  className="text-white cursor-pointer hover:text-global-red duration-200"
                 >
-                  login
+                  {token ? `Welcome ${user}` : "Login"}
                 </span>
               </div>
             </div>

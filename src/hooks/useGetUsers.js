@@ -14,5 +14,6 @@ export default function useGetUser(username) {
     }
     return useQuery({
         queryFn,
+        queryKey: [`user-${username}`]
     })
 }

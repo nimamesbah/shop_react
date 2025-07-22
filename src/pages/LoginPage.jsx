@@ -21,7 +21,7 @@ const schema = yup.object({
 export default function LoginPage() {
   const [invalidValues, setInvalidValues] = useImmer("");
   const navigate = useNavigate();
-  const { token, setToken } = useTokenStore();
+  const { token, setToken, setUser } = useTokenStore();
 
   const {
     register,
@@ -31,20 +31,23 @@ export default function LoginPage() {
   const { mutateAsync } = useLogin();
 
   async function submit(data) {
+    debugger;
     try {
       const result = await mutateAsync({
         username: data.username,
         password: data.password,
       });
       Cookies.set("token", result.token);
+      Cookies.set("user", data.username);
+      setUser(data.username);
       setToken(result.token);
       navigate(`/dashboard/${data.username}`);
     } catch (error) {
-      setInvalidValues(error.response.data);
+      setInvalidValues(error?.response?.data);
       setTimeout(() => {
         setInvalidValues("");
       }, 3000);
-      console.log("catch", error.response.data);
+      console.log("catch", error?.response?.data);
     }
   }
   return (

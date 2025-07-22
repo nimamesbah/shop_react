@@ -7,6 +7,7 @@ import {
 import Cookies from "js-cookie"
 
 export const useTokenStore = create(immer((set) => ({
+    user: Cookies.get("user") || "",
     token: Cookies.get("token") || "",
     setToken: (data) => {
         set((state) => {
@@ -15,6 +16,20 @@ export const useTokenStore = create(immer((set) => ({
         })
 
     },
-    clearToken: () => {},
+    clearToken: () => {
+        set((state) => {
+            Cookies.remove("token")
+            state.token = ""
+            Cookies.remove("user")
+            state.user = ""
+            // window.location.reload()
+
+        })
+    },
+    setUser: (username) => {
+        set(state => {
+            state.user = username
+        })
+    }
 
 })))

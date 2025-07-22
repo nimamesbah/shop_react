@@ -1,8 +1,12 @@
 import { Box, Button } from "@mui/material";
+import { useTokenStore } from "../../hooks/useTokenStore";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardInfo({
   userInfo: { username, name, email, address, phone },
 }) {
+  const { clearToken } = useTokenStore();
+  const navigate = useNavigate();
   return (
     <>
       <div className="flex flex-col gap-3 justify-center">
@@ -31,10 +35,14 @@ export default function DashboardInfo({
           email: <span className="font-normal">{email}</span>
         </div>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Button variant="contained" color="secondary">
+          <Button
+            onClick={() => navigate("/")}
+            variant="contained"
+            color="primary"
+          >
             shop
           </Button>
-          <Button variant="contained" color="secondary">
+          <Button onClick={clearToken} variant="contained" color="secondary">
             logout
           </Button>
         </Box>
