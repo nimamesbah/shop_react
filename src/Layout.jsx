@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "./assets/components/footer";
 import Header from "./assets/components/Header";
-const pathNames = ["login", "dashboard"];
+const pathNames = ["login", "dashboard", "test"];
 export default function Layout() {
   const location = useLocation();
   console.log("loction", location.pathname.split("/").at(1));

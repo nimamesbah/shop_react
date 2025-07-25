@@ -12,6 +12,7 @@ export default function useGetAllProducts() {
     }
     return useQuery({
         queryFn,
-        queryKey: ["products"]
+        queryKey: ["products"],
+        retry: 2
     })
 }

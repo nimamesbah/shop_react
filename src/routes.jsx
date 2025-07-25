@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import Layout from "./Layout";
 import DashboardPage from "./pages/dashboardPage";
 import ProtectedDashboard from "./protectedRoutes/ProtectedDashBoard";
+import Slider from "./assets/components/slider";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
             <DashboardPage />
           </ProtectedDashboard>
         ),
+      },
+      {
+        path: "/test",
+        element: <Slider />,
       },
     ],
   },
