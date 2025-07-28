@@ -17,7 +17,7 @@ export default function CartPage() {
 
   return (
     <>
-      <div className="w-[90%] flex flex-col sm:flex-row max-w-container mx-auto mt-3 gap-4 sm:items-end items-center h-full">
+      <div className="w-[90%] flex flex-col sm:flex-row max-w-container mx-auto mt-3 gap-4 sm:items-stretch items-center ">
         <div className="flex flex-col gap-16 items-center ">
           {cart.map((item) => (
             <CartCards items={item} />
@@ -25,9 +25,7 @@ export default function CartPage() {
         </div>
         <div
           id="cont"
-          className={`w-full flex flex-col sm:gap-[${
-            cart.length === 0 ? "10px" : "670px"
-          }] gap-4 justify-between h-full`}
+          className={`w-full flex flex-col gap-4 justify-between  `}
         >
           <Slider />
           <div
