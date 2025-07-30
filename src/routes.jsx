@@ -5,11 +5,13 @@ import HomePage from "./pages/homePage";
 import NotFoundPage from "./pages/notFoundPage";
 import SearchedPage from "./pages/SearchedPage";
 import SingleCardPage from "./pages/SingleCardPage";
-import LoginPage from "./pages/LoginPage";
+// import LoginPage from "./pages/LoginPage";
 import Layout from "./Layout";
 import DashboardPage from "./pages/dashboardPage";
 import ProtectedDashboard from "./protectedRoutes/ProtectedDashBoard";
 import Slider from "./assets/components/slider";
+import { lazy } from "react";
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 
 const router = createBrowserRouter([
   {
