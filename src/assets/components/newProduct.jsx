@@ -1,5 +1,16 @@
 import { Button } from "@mui/material";
 import useGetSingleProducts from "../../hooks/useGetSingleProduct";
+import { motion } from "framer-motion";
+const variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
+};
+const childVariants = { hidden: { opacity: 0 }, show: { opacity: 1 } };
 
 export default function NewProduct() {
   const { data: jewelery, isLoading } = useGetSingleProducts(5);
@@ -9,8 +20,16 @@ export default function NewProduct() {
   return (
     <>
       <div className="  flex flex-wrap max-X450X:flex-col gap-4 justify-center mainNew:justify-between X450X:items-center  mx-auto w-[90%] mt-20">
-        <div className="flex  gap-6 flex-wrap justify-center max-X450X:flex-col items-center w-full ">
-          <div className="w-62 h-60   relative hover:shadow-[0_0_0_2px_#D10024] cursor-pointer overflow-hidden group">
+        <motion.div
+          variants={variants}
+          initial="hidden"
+          animate="show"
+          className="flex  gap-6 flex-wrap justify-center max-X450X:flex-col items-center w-full "
+        >
+          <motion.div
+            variants={childVariants}
+            className="w-62 h-60   relative hover:shadow-[0_0_0_2px_#D10024] cursor-pointer overflow-hidden group"
+          >
             <img
               className="object-contain h-full w-full group-hover:scale-[1.1] duration-300"
               src={!isLoading ? jewelery.image : ""}
@@ -24,8 +43,11 @@ export default function NewProduct() {
                 shop now!!
               </Button>
             </div>
-          </div>
-          <div className="w-62 h-60  relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer">
+          </motion.div>
+          <motion.div
+            variants={childVariants}
+            className="w-62 h-60  relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer"
+          >
             <img
               className="object-contain h-full w-full group-hover:scale-[1.1] duration-300"
               src={!elecLoad ? electronics.image : ""}
@@ -42,8 +64,11 @@ export default function NewProduct() {
                 shop now!!
               </Button>
             </div>
-          </div>
-          <div className="w-62 h-60 relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer">
+          </motion.div>
+          <motion.div
+            variants={childVariants}
+            className="w-62 h-60 relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer"
+          >
             <img
               className="object-contain h-full w-full group-hover:scale-[1.1] duration-300"
               src={!womenLoad ? women.image : ""}
@@ -60,8 +85,11 @@ export default function NewProduct() {
                 shop now!!
               </Button>
             </div>
-          </div>
-          <div className="w-62 h-60   relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer">
+          </motion.div>
+          <motion.div
+            variants={childVariants}
+            className="w-62 h-60   relative overflow-hidden group hover:shadow-[0_0_0_2px_#D10024] cursor-pointer"
+          >
             <img
               className="object-contain h-full w-full group-hover:scale-[1.1] duration-300"
               src={!menLoad ? men.image : ""}
@@ -78,8 +106,8 @@ export default function NewProduct() {
                 shop now!!
               </Button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </>
   );
